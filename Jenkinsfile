@@ -25,7 +25,7 @@ pipeline {
   stages {
 
     stage('build Snapshot') {
-      when { not { branch 'master' } }
+      when { not { branch 'feature/update-spring' } }
       agent {
         docker {
           reuseNode true
@@ -45,7 +45,7 @@ pipeline {
     }
 
     stage('Build Release') {
-      when { branch 'master' }
+      when { branch 'feature/update-spring' }
       agent {
         docker {
           reuseNode true
@@ -53,7 +53,7 @@ pipeline {
           // - mount maven repo from host system
           // - mount docker socket from host system
           // - run as root
-          args '-v $HOME/.m2:/root/.m2 -v /var/run/docker.sock:/var/run/docker.sock -u 0:0'
+          args '-v $HOME/.m2:/root/.m2'
         }
       }
       steps {
