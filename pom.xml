@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -202,23 +202,19 @@
     </dependencies>
 
     <!-- scm information -->
-    <scm>
-        <connection>scm:git:git@github.com:tuxdevelop/spring-batch-lightmin.git</connection>
-        <developerConnection>scm:git:tuxdevelop@github.com:tuxdevelop/spring-batch-lightmin.git
-        </developerConnection>
-        <url>https://github.com/tuxdevelop/spring-batch-lightmin.git</url>
-    </scm>
 
 
     <!-- distribution management -->
     <distributionManagement>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>yooture-private-release-repository</id>
+            <name>Yooture's Private Release Repository</name>
+            <url>https://repo.yooture.net/repository/yooture-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>yooture-private-snapshot-repository</id>
+            <name>Yooture's Private Snapshot Repository</name>
+            <url>https://repo.yooture.net/repository/yooture-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
