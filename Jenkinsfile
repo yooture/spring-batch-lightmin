@@ -25,7 +25,7 @@ pipeline {
   stages {
 
     stage('build Snapshot') {
-      when { not { branch 'origin/feature/update-spring' } }
+      when { branch 'master' }
       agent {
         docker {
           reuseNode true
@@ -45,7 +45,7 @@ pipeline {
     }
 
     stage('Build Release') {
-      when { branch 'origin/feature/update-spring' }
+      when { not { branch 'master' } }
       agent {
         docker {
           reuseNode true
