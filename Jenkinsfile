@@ -7,10 +7,10 @@ def releasedArtifact = ["version":"N/A"]
 pipeline {
   agent any
 
-  environment {
+//   environment {
     // Creates variables AZ_DOCKER_REGISTRY=uuuu:pppp, AZ_DOCKER_REGISTRY_USR=uuuu, AZ_DOCKER_REGISTRY_PSW=pppp
     //DOCKER_REGISTRY = credentials("AZ_DOCKER_REGISTRY")
-  }
+//   }
 
   options {
     // General Jenkins job properties
