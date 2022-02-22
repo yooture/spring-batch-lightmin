@@ -7,10 +7,16 @@ def releasedArtifact = ["version":"N/A"]
 pipeline {
   agent any
 
-//   environment {
-    // Creates variables AZ_DOCKER_REGISTRY=uuuu:pppp, AZ_DOCKER_REGISTRY_USR=uuuu, AZ_DOCKER_REGISTRY_PSW=pppp
-    //DOCKER_REGISTRY = credentials("AZ_DOCKER_REGISTRY")
-//   }
+  parameters {
+    string(name: 'VERSION', defaultValue: 'NONE', description: 'the version to publish the artifact to nexus with. (NONE: do not publish, just build)')
+  }
+
+
+
+  // environment {
+  //   // Creates variables AZ_DOCKER_REGISTRY=uuuu:pppp, AZ_DOCKER_REGISTRY_USR=uuuu, AZ_DOCKER_REGISTRY_PSW=pppp
+  //   //DOCKER_REGISTRY = credentials("AZ_DOCKER_REGISTRY")
+  // }
 
   options {
     // General Jenkins job properties
@@ -25,14 +31,12 @@ pipeline {
   stages {
 
     stage('build Snapshot') {
-      when { branch 'master' }
+      when { expression { return params.VERSION == "NONE" } }
       agent {
         docker {
           reuseNode true
           image 'yooture/yoo-java-11-node-8:4'
           // - mount maven repo from host system
-          // - mount docker socket from host system
-          // - run as root
           args '-v $HOME/.m2:/root/.m2'
         }
       }
@@ -45,22 +49,26 @@ pipeline {
     }
 
     stage('Build Release') {
-      when { not { branch 'master' } }
+      when { expression { return params.VERSION != "NONE" } }
       agent {
         docker {
           reuseNode true
           image 'yooture/yoo-java-11-node-8:4'
           // - mount maven repo from host system
-          // - mount docker socket from host system
-          // - run as root
           args '-v $HOME/.m2:/root/.m2'
         }
       }
       steps {
         script {
           withMaven(mavenSettingsConfig: 'DEFAULT_YOOTRE_MAVEN_SETTINGS', options: [artifactsPublisher(disabled: true)]) {
-            yooBuild.doGitConfig(false)
-            releasedArtifact = yooBuild.mvnReleaseMasterBranch(".")
+            runMvn "versions:set -DnewVersion=${params.VERSION}"
+            runMvn "clean deploy"
+
+            def model = readMavenPom(file: 'pom.xml')
+            def releasedArtifact = "${model.groupId}:${model.artifactId}:${model.version}"
+
+            // restore the old version to be prepared for new releases
+            runMvn "versions:revert"
             slackSend color: 'good', message: "a new version was released to the maven repository: ${releasedArtifact}"
           }
         }
