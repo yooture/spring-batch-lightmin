@@ -2,7 +2,6 @@
 
 def yooBuild = new yooture.jenkins.yooture.YooBuild(this)
 def snapshotTag = "N/A"
-def releasedArtifact = ["version":"N/A"]
 
 pipeline {
   agent any
